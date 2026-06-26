@@ -111,6 +111,14 @@ button:disabled {
   text-transform: uppercase;
 }
 
+.version-label {
+  color: var(--muted);
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-top: 10px;
+}
+
 h1,
 h2 {
   letter-spacing: 0;

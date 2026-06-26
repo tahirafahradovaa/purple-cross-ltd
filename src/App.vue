@@ -32,6 +32,7 @@ const originalCode = ref('');
 const confirmDelete = ref(null);
 const importError = ref('');
 const importInput = ref(null);
+const appVersion = '1.0.0';
 const isAuthenticated = ref(false);
 const loginError = ref('');
 const currentUser = ref({
@@ -293,6 +294,7 @@ async function importEmployees(event) {
       <p v-if="loginError" class="inline-error">{{ loginError }}</p>
 
       <button class="primary login-submit" type="submit">Sign in</button>
+      <span class="version-label">Version {{ appVersion }}</span>
     </form>
   </section>
 
@@ -301,6 +303,7 @@ async function importEmployees(event) {
       <div>
         <p class="eyebrow">Purple Cross Ltd</p>
         <h1>Employee Management</h1>
+        <span class="version-label">Version {{ appVersion }}</span>
       </div>
       <div class="user-badge" aria-label="Logged in user">
         <span class="avatar">{{ userInitials }}</span>
