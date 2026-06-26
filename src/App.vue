@@ -492,19 +492,18 @@ function removeToast(id) {
     <section class="mobile-employee-list" aria-label="Employee mobile list">
       <article v-for="employee in pagedEmployees" :key="employee.code" class="employee-card">
         <header class="employee-card-header">
-          <button class="name-button" type="button" @click="openView(employee)">
-            <strong>{{ employee.fullName }}</strong>
-            <span>{{ employee.code }}</span>
-          </button>
-          <span>{{ employee.department }}</span>
+          <div>
+            <button class="name-button" type="button" @click="openView(employee)">
+              <strong>{{ employee.fullName }}</strong>
+              <span>{{ employee.code }}</span>
+            </button>
+            <p>{{ employee.occupation }}</p>
+          </div>
+          <span class="department-chip">{{ employee.department }}</span>
         </header>
 
-        <dl class="employee-card-details">
-          <div>
-            <dt>Occupation</dt>
-            <dd>{{ employee.occupation }}</dd>
-          </div>
-          <div>
+        <dl class="employee-card-status">
+          <div class="status-panel">
             <dt>Employment</dt>
             <dd>
               <span :class="['status-pill', statusTone(employmentStatus(employee.dateOfEmployment))]">
@@ -513,7 +512,7 @@ function removeToast(id) {
               <small>{{ formatDate(employee.dateOfEmployment) }}</small>
             </dd>
           </div>
-          <div>
+          <div class="status-panel">
             <dt>Termination</dt>
             <dd>
               <span :class="['status-pill', statusTone(terminationStatus(employee.terminationDate))]">
@@ -524,7 +523,7 @@ function removeToast(id) {
           </div>
         </dl>
 
-        <div class="row-actions">
+        <div class="mobile-card-actions">
           <button class="secondary compact" type="button" @click="openView(employee)">View</button>
           <button class="secondary compact" type="button" @click="openEdit(employee)">Edit</button>
           <button class="danger compact" type="button" @click="askDelete(employee)">Delete</button>

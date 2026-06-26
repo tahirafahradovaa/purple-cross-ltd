@@ -822,49 +822,73 @@ button.danger {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 14px;
+    box-shadow: 0 10px 28px rgba(23, 32, 42, 0.08);
+    overflow: hidden;
+    padding: 0;
   }
 
   .employee-card-header {
-    align-items: flex-start;
+    align-items: start;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fbfc 100%);
+    border-bottom: 1px solid var(--border);
     display: flex;
     gap: 12px;
     justify-content: space-between;
+    padding: 14px;
   }
 
-  .employee-card-header > span {
-    background: var(--surface-muted);
-    border-radius: 999px;
+  .employee-card-header .name-button {
+    max-width: 100%;
+  }
+
+  .employee-card-header p {
     color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 6px 0 0;
+  }
+
+  .department-chip {
+    background: #eef7f5;
+    border: 1px solid #c7e4de;
+    border-radius: 999px;
+    color: var(--accent-strong);
     flex: 0 0 auto;
     font-size: 0.76rem;
     font-weight: 800;
-    max-width: 42%;
+    max-width: 44%;
     overflow: hidden;
     padding: 6px 9px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .employee-card-details {
+  .employee-card-status {
     display: grid;
-    gap: 12px;
-    margin: 14px 0;
+    gap: 10px;
+    grid-template-columns: 1fr;
+    margin: 0;
+    padding: 12px 14px;
   }
 
-  .employee-card-details div {
+  .status-panel {
+    background: #f9fbfc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
     display: grid;
-    gap: 5px;
+    gap: 8px;
+    padding: 12px;
   }
 
-  .employee-card-details dt {
+  .employee-card-status dt {
     color: var(--muted);
     font-size: 0.76rem;
     font-weight: 800;
     text-transform: uppercase;
   }
 
-  .employee-card-details dd {
+  .employee-card-status dd {
     margin: 0;
   }
 
@@ -872,8 +896,20 @@ button.danger {
     min-width: 0;
   }
 
+  .mobile-card-actions {
+    border-top: 1px solid var(--border);
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 12px 14px 14px;
+  }
+
+  .mobile-card-actions button {
+    min-width: 0;
+    width: 100%;
+  }
+
   .toolbar-actions button,
-  .row-actions button,
   .drawer-actions button,
   .modal-actions button {
     width: 100%;
