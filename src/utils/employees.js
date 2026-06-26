@@ -52,6 +52,7 @@ export function employmentStatus(dateOfEmployment, today = new Date()) {
   const date = toDateOnly(dateOfEmployment);
   if (!date) return 'Missing start date';
 
+  // The case study asks future employment dates to read as "Employed soon".
   return date > startOfToday(today) ? 'Employed soon' : 'Currently employed';
 }
 
@@ -77,6 +78,7 @@ export function sortEmployees(employees, sortKey, direction) {
     const rightValue = right[sortKey] || '';
 
     if (sortKey === 'dateOfEmployment' || sortKey === 'terminationDate') {
+      // Date columns are sorted chronologically, with empty dates placed last.
       return compareDates(leftValue, rightValue) * multiplier;
     }
 
@@ -122,6 +124,7 @@ export function validateEmployee(employee, existingEmployees, originalCode = '')
     errors.code = 'Use letters, numbers, and hyphens only.';
   }
 
+  // During edits the original employee code is allowed; all other duplicates fail.
   const duplicate = existingEmployees.some((item) => (
     item.code.toLowerCase() === normalized.code.toLowerCase()
     && item.code.toLowerCase() !== originalCode.toLowerCase()
@@ -210,6 +213,7 @@ function isValidDateInput(value) {
   const [year, month, day] = String(value).split('-').map(Number);
   const date = new Date(year, month - 1, day);
 
+  // JavaScript rolls invalid dates forward, so compare the parts after parsing.
   return date.getFullYear() === year
     && date.getMonth() === month - 1
     && date.getDate() === day;

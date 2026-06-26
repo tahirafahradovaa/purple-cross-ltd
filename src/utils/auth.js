@@ -41,6 +41,7 @@ export function validateUser(user, existingUsers, originalEmail = '') {
     errors.email = 'Enter a valid email address.';
   }
 
+  // Email is the unique login identifier, but the edited user's current email is valid.
   const duplicate = existingUsers.some((existingUser) => (
     existingUser.email.toLowerCase() === normalized.email.toLowerCase()
     && existingUser.email.toLowerCase() !== originalEmail.toLowerCase()
@@ -52,6 +53,7 @@ export function validateUser(user, existingUsers, originalEmail = '') {
 }
 
 export function userNameFromEmail(email) {
+  // Demo logins derive a readable display name from common email separators.
   return String(email)
     .trim()
     .split('@')[0]

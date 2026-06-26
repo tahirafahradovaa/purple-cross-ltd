@@ -125,6 +125,7 @@ const pagedEmployees = computed(() => {
 });
 
 const metrics = computed(() => {
+  // Active headcount excludes people whose termination date has already passed.
   const active = employees.value.filter((employee) => (
     employmentStatus(employee.dateOfEmployment) === 'Currently employed'
     && terminationStatus(employee.terminationDate) !== 'Terminated'
@@ -151,6 +152,7 @@ function login() {
 
   if (loginError.value) return;
 
+  // Known users keep their saved role/status; unknown demo logins receive viewer access.
   currentUser.value = {
     id: 'USR000',
     name: userNameFromEmail(loginForm.email),
@@ -164,6 +166,7 @@ function login() {
 }
 
 function logout() {
+  // Clear transient UI state so the next session starts from the dashboard list.
   closePanel();
   confirmDelete.value = null;
   closeUserEditor();
@@ -199,6 +202,7 @@ function openView(employee) {
 
 function openEdit(employee) {
   Object.assign(form, { ...employee });
+  // Preserve the original code so editing does not trigger duplicate-code validation.
   originalCode.value = employee.code;
   selectedEmployee.value = employee;
   formErrors.value = {};
@@ -213,6 +217,7 @@ function closePanel() {
 
 function openUserEditor(user) {
   editingUser.value = user;
+  // Preserve the original email so users can save their own unchanged address.
   originalUserEmail.value = user.email;
   userErrors.value = {};
   Object.assign(userForm, normalizeUser(user));
@@ -236,6 +241,7 @@ function saveUser() {
     user.id === normalized.id ? normalized : user
   ));
 
+  // Keep the header badge in sync when the signed-in user edits their own profile.
   if (currentUser.value.id === normalized.id) {
     currentUser.value = normalized;
   }
@@ -256,6 +262,7 @@ function saveEmployee() {
   const normalized = normalizeEmployee(form);
 
   if (mode.value === 'edit') {
+    // Replace by the original immutable key in case the employee code was edited.
     employees.value = employees.value.map((employee) => (
       employee.code === originalCode.value ? normalized : employee
     ));
@@ -305,6 +312,7 @@ async function importEmployees(event) {
     const text = await file.text();
     const imported = parseImportedEmployees(text);
 
+    // Imports go through the same rules as manual entry to keep both paths consistent.
     const validationErrors = imported
       .map((employee) => validateEmployee(employee, imported, employee.code))
       .filter((errors) => Object.keys(errors).length > 0);
