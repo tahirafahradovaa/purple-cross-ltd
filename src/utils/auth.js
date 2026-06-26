@@ -1,3 +1,5 @@
+export const sessionStorageKey = 'purpleCrossSession';
+
 export function validateLogin(credentials) {
   const email = String(credentials.email ?? '').trim();
   const password = String(credentials.password ?? '').trim();
@@ -15,6 +17,43 @@ export function validateLogin(credentials) {
   }
 
   return '';
+}
+
+export function createSessionUser(email) {
+  const normalizedEmail = String(email ?? '').trim();
+
+  return {
+    name: userNameFromEmail(normalizedEmail),
+    email: normalizedEmail,
+  };
+}
+
+export function readStoredSession(storage) {
+  try {
+    const rawSession = storage?.getItem(sessionStorageKey);
+    if (!rawSession) return null;
+
+    const session = JSON.parse(rawSession);
+    if (!session?.email || !session?.name) return null;
+
+    return {
+      name: String(session.name),
+      email: String(session.email),
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function writeStoredSession(storage, user) {
+  storage?.setItem(sessionStorageKey, JSON.stringify({
+    name: user.name,
+    email: user.email,
+  }));
+}
+
+export function clearStoredSession(storage) {
+  storage?.removeItem(sessionStorageKey);
 }
 
 export function userNameFromEmail(email) {

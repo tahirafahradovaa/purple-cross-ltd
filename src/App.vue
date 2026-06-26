@@ -15,7 +15,13 @@ import {
   terminationStatus,
   validateEmployee,
 } from './utils/employees';
-import { userNameFromEmail, validateLogin } from './utils/auth';
+import {
+  clearStoredSession,
+  createSessionUser,
+  readStoredSession,
+  validateLogin,
+  writeStoredSession,
+} from './utils/auth';
 
 const employees = ref(employeesSeed.map(normalizeEmployee));
 const query = ref('');
@@ -34,9 +40,10 @@ const confirmDelete = ref(null);
 const importError = ref('');
 const importInput = ref(null);
 const appVersion = '1.0.0';
-const isAuthenticated = ref(false);
+const storedSession = readStoredSession(window.localStorage);
+const isAuthenticated = ref(Boolean(storedSession));
 const loginError = ref('');
-const currentUser = ref({
+const currentUser = ref(storedSession || {
   name: 'Admin Manager',
   email: 'admin@purplecross.test',
 });
@@ -116,10 +123,8 @@ function login() {
 
   if (loginError.value) return;
 
-  currentUser.value = {
-    name: userNameFromEmail(loginForm.email),
-    email: loginForm.email.trim(),
-  };
+  currentUser.value = createSessionUser(loginForm.email);
+  writeStoredSession(window.localStorage, currentUser.value);
   isAuthenticated.value = true;
 }
 
@@ -127,6 +132,7 @@ function logout() {
   // Clear transient UI state so the next session starts from the dashboard list.
   closePanel();
   confirmDelete.value = null;
+  clearStoredSession(window.localStorage);
   isAuthenticated.value = false;
 }
 
