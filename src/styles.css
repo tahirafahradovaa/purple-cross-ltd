@@ -567,13 +567,77 @@ button.danger {
   background: var(--surface);
   border-radius: 8px;
   box-shadow: var(--shadow);
-  max-width: 420px;
+  max-width: 460px;
   padding: 24px;
   width: 100%;
 }
 
 .modal p {
   color: var(--muted);
+}
+
+.modal-actions {
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.delete-modal {
+  padding: 28px;
+}
+
+.delete-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.warning-mark {
+  align-items: center;
+  background: var(--danger-bg);
+  border: 1px solid #ffc9c4;
+  border-radius: 50%;
+  color: var(--danger);
+  display: inline-flex;
+  flex: 0 0 42px;
+  font-size: 1.15rem;
+  font-weight: 900;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.delete-summary {
+  background: #f9fbfc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 16px;
+}
+
+.delete-summary div {
+  display: grid;
+  gap: 4px;
+}
+
+.delete-summary dt {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.delete-summary dd {
+  color: var(--text);
+  font-weight: 800;
+  margin: 0;
+}
+
+.delete-actions {
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
 }
 
 .visually-hidden {

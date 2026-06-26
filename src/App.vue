@@ -662,14 +662,38 @@ async function importEmployees(event) {
     </aside>
 
     <div v-if="confirmDelete" class="modal-backdrop" role="presentation">
-      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="delete-title">
-        <h2 id="delete-title">Delete employee?</h2>
+      <section class="modal delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-title">
+        <div class="delete-header">
+          <span class="warning-mark" aria-hidden="true">!</span>
+          <div>
+            <p class="eyebrow">Confirm removal</p>
+            <h2 id="delete-title">Delete employee record?</h2>
+          </div>
+        </div>
+
         <p>
-          This removes {{ confirmDelete.fullName }} from the current dashboard data.
+          This action removes the employee from the current dashboard list. Review the
+          details below before confirming.
         </p>
-        <div class="modal-actions">
-          <button class="secondary" type="button" @click="confirmDelete = null">Cancel</button>
-          <button class="danger" type="button" @click="deleteEmployee">Delete</button>
+
+        <dl class="delete-summary">
+          <div>
+            <dt>Employee</dt>
+            <dd>{{ confirmDelete.fullName }}</dd>
+          </div>
+          <div>
+            <dt>Code</dt>
+            <dd>{{ confirmDelete.code }}</dd>
+          </div>
+          <div>
+            <dt>Department</dt>
+            <dd>{{ confirmDelete.department }}</dd>
+          </div>
+        </dl>
+
+        <div class="modal-actions delete-actions">
+          <button class="secondary" type="button" @click="confirmDelete = null">Keep employee</button>
+          <button class="danger" type="button" @click="deleteEmployee">Delete record</button>
         </div>
       </section>
     </div>
