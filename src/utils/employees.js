@@ -31,6 +31,8 @@ export function normalizeEmployee(employee) {
 
 export function toDateOnly(value) {
   if (!value) return null;
+  if (!isValidDateInput(value)) return null;
+
   const date = new Date(`${value}T00:00:00`);
   return Number.isNaN(date.getTime()) ? null : date;
 }
@@ -129,11 +131,11 @@ export function validateEmployee(employee, existingEmployees, originalCode = '')
   const employmentDate = toDateOnly(normalized.dateOfEmployment);
   const terminationDate = toDateOnly(normalized.terminationDate);
 
-  if (normalized.dateOfEmployment && !employmentDate) {
+  if (normalized.dateOfEmployment && !isValidDateInput(normalized.dateOfEmployment)) {
     errors.dateOfEmployment = 'Enter a valid employment date.';
   }
 
-  if (normalized.terminationDate && !terminationDate) {
+  if (normalized.terminationDate && !isValidDateInput(normalized.terminationDate)) {
     errors.terminationDate = 'Enter a valid termination date.';
   }
 
@@ -200,4 +202,15 @@ function compareDates(left, right) {
 
 function startOfToday(today) {
   return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+}
+
+function isValidDateInput(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value))) return false;
+
+  const [year, month, day] = String(value).split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+
+  return date.getFullYear() === year
+    && date.getMonth() === month - 1
+    && date.getDate() === day;
 }

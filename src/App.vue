@@ -15,6 +15,7 @@ import {
   terminationStatus,
   validateEmployee,
 } from './utils/employees';
+import { userNameFromEmail, validateLogin } from './utils/auth';
 
 const employees = ref(employeesSeed.map(normalizeEmployee));
 const query = ref('');
@@ -110,24 +111,12 @@ const userInitials = computed(() => currentUser.value.name
   .toUpperCase());
 
 function login() {
-  loginError.value = '';
+  loginError.value = validateLogin(loginForm);
 
-  if (!loginForm.email.trim() || !loginForm.password.trim()) {
-    loginError.value = 'Email and password are required.';
-    return;
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginForm.email.trim())) {
-    loginError.value = 'Enter a valid email address.';
-    return;
-  }
+  if (loginError.value) return;
 
   currentUser.value = {
-    name: loginForm.email.split('@')[0]
-      .split(/[._-]/)
-      .filter(Boolean)
-      .map((part) => `${part[0].toUpperCase()}${part.slice(1)}`)
-      .join(' ') || 'Dashboard User',
+    name: userNameFromEmail(loginForm.email),
     email: loginForm.email.trim(),
   };
   isAuthenticated.value = true;
