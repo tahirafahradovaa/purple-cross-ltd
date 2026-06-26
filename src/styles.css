@@ -313,6 +313,10 @@ button:focus-visible {
   overflow: auto;
 }
 
+.employee-results {
+  scroll-margin-top: 14px;
+}
+
 .mobile-employee-list {
   display: none;
 }

@@ -435,105 +435,107 @@ function removeToast(id) {
 
     <p v-if="importError" class="inline-error">{{ importError }}</p>
 
-    <section id="employees" class="table-wrap" aria-label="Employee grid">
-      <table>
-        <thead>
-          <tr>
-            <th v-for="column in columns" :key="column.key" scope="col">
-              <button class="sort-button" type="button" @click="setSort(column.key)">
-                {{ column.label }}
-                <span v-if="sortKey === column.key">{{ sortDirection === 'asc' ? 'Asc' : 'Desc' }}</span>
-              </button>
-            </th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="employee in pagedEmployees" :key="employee.code">
-            <td>
+    <div id="employees" class="employee-results">
+      <section class="table-wrap" aria-label="Employee grid">
+        <table>
+          <thead>
+            <tr>
+              <th v-for="column in columns" :key="column.key" scope="col">
+                <button class="sort-button" type="button" @click="setSort(column.key)">
+                  {{ column.label }}
+                  <span v-if="sortKey === column.key">{{ sortDirection === 'asc' ? 'Asc' : 'Desc' }}</span>
+                </button>
+              </th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="employee in pagedEmployees" :key="employee.code">
+              <td>
+                <button class="name-button" type="button" @click="openView(employee)">
+                  <strong>{{ employee.fullName }}</strong>
+                  <span>{{ employee.code }}</span>
+                </button>
+              </td>
+              <td>{{ employee.occupation }}</td>
+              <td>{{ employee.department }}</td>
+              <td>
+                <div class="status-cell">
+                  <span :class="['status-pill', statusTone(employmentStatus(employee.dateOfEmployment))]">
+                    {{ employmentStatus(employee.dateOfEmployment) }}
+                  </span>
+                  <small>{{ formatDate(employee.dateOfEmployment) }}</small>
+                </div>
+              </td>
+              <td>
+                <div class="status-cell">
+                  <span :class="['status-pill', statusTone(terminationStatus(employee.terminationDate))]">
+                    {{ terminationStatus(employee.terminationDate) }}
+                  </span>
+                  <small>{{ formatDate(employee.terminationDate) }}</small>
+                </div>
+              </td>
+              <td>
+                <div class="row-actions">
+                  <button class="secondary compact" type="button" @click="openView(employee)">View</button>
+                  <button class="secondary compact" type="button" @click="openEdit(employee)">Edit</button>
+                  <button class="danger compact" type="button" @click="askDelete(employee)">Delete</button>
+                </div>
+              </td>
+            </tr>
+            <tr v-if="pagedEmployees.length === 0">
+              <td colspan="6" class="empty-state">No employees match the current filters.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="mobile-employee-list" aria-label="Employee mobile list">
+        <article v-for="employee in pagedEmployees" :key="employee.code" class="employee-card">
+          <header class="employee-card-header">
+            <div>
               <button class="name-button" type="button" @click="openView(employee)">
                 <strong>{{ employee.fullName }}</strong>
                 <span>{{ employee.code }}</span>
               </button>
-            </td>
-            <td>{{ employee.occupation }}</td>
-            <td>{{ employee.department }}</td>
-            <td>
-              <div class="status-cell">
+              <p>{{ employee.occupation }}</p>
+            </div>
+            <span class="department-chip">{{ employee.department }}</span>
+          </header>
+
+          <dl class="employee-card-status">
+            <div class="status-panel">
+              <dt>Employment</dt>
+              <dd>
                 <span :class="['status-pill', statusTone(employmentStatus(employee.dateOfEmployment))]">
                   {{ employmentStatus(employee.dateOfEmployment) }}
                 </span>
                 <small>{{ formatDate(employee.dateOfEmployment) }}</small>
-              </div>
-            </td>
-            <td>
-              <div class="status-cell">
+              </dd>
+            </div>
+            <div class="status-panel">
+              <dt>Termination</dt>
+              <dd>
                 <span :class="['status-pill', statusTone(terminationStatus(employee.terminationDate))]">
                   {{ terminationStatus(employee.terminationDate) }}
                 </span>
                 <small>{{ formatDate(employee.terminationDate) }}</small>
-              </div>
-            </td>
-            <td>
-              <div class="row-actions">
-                <button class="secondary compact" type="button" @click="openView(employee)">View</button>
-                <button class="secondary compact" type="button" @click="openEdit(employee)">Edit</button>
-                <button class="danger compact" type="button" @click="askDelete(employee)">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr v-if="pagedEmployees.length === 0">
-            <td colspan="6" class="empty-state">No employees match the current filters.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+              </dd>
+            </div>
+          </dl>
 
-    <section class="mobile-employee-list" aria-label="Employee mobile list">
-      <article v-for="employee in pagedEmployees" :key="employee.code" class="employee-card">
-        <header class="employee-card-header">
-          <div>
-            <button class="name-button" type="button" @click="openView(employee)">
-              <strong>{{ employee.fullName }}</strong>
-              <span>{{ employee.code }}</span>
-            </button>
-            <p>{{ employee.occupation }}</p>
+          <div class="mobile-card-actions">
+            <button class="secondary compact" type="button" @click="openView(employee)">View</button>
+            <button class="secondary compact" type="button" @click="openEdit(employee)">Edit</button>
+            <button class="danger compact" type="button" @click="askDelete(employee)">Delete</button>
           </div>
-          <span class="department-chip">{{ employee.department }}</span>
-        </header>
+        </article>
 
-        <dl class="employee-card-status">
-          <div class="status-panel">
-            <dt>Employment</dt>
-            <dd>
-              <span :class="['status-pill', statusTone(employmentStatus(employee.dateOfEmployment))]">
-                {{ employmentStatus(employee.dateOfEmployment) }}
-              </span>
-              <small>{{ formatDate(employee.dateOfEmployment) }}</small>
-            </dd>
-          </div>
-          <div class="status-panel">
-            <dt>Termination</dt>
-            <dd>
-              <span :class="['status-pill', statusTone(terminationStatus(employee.terminationDate))]">
-                {{ terminationStatus(employee.terminationDate) }}
-              </span>
-              <small>{{ formatDate(employee.terminationDate) }}</small>
-            </dd>
-          </div>
-        </dl>
-
-        <div class="mobile-card-actions">
-          <button class="secondary compact" type="button" @click="openView(employee)">View</button>
-          <button class="secondary compact" type="button" @click="openEdit(employee)">Edit</button>
-          <button class="danger compact" type="button" @click="askDelete(employee)">Delete</button>
-        </div>
-      </article>
-
-      <p v-if="pagedEmployees.length === 0" class="empty-state">
-        No employees match the current filters.
-      </p>
-    </section>
+        <p v-if="pagedEmployees.length === 0" class="empty-state">
+          No employees match the current filters.
+        </p>
+      </section>
+    </div>
 
     <footer class="pagination" aria-label="Pagination">
       <span>
