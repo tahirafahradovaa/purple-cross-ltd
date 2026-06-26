@@ -262,6 +262,10 @@ button:focus-visible {
   overflow: auto;
 }
 
+.mobile-employee-list {
+  display: none;
+}
+
 table {
   border-collapse: collapse;
   min-width: 980px;
@@ -689,6 +693,69 @@ button.danger {
 
   .toolbar {
     grid-template-columns: 1fr;
+  }
+
+  .table-wrap {
+    display: none;
+  }
+
+  .mobile-employee-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  .employee-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .employee-card-header {
+    align-items: flex-start;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .employee-card-header > span {
+    background: var(--surface-muted);
+    border-radius: 999px;
+    color: var(--muted);
+    flex: 0 0 auto;
+    font-size: 0.76rem;
+    font-weight: 800;
+    max-width: 42%;
+    overflow: hidden;
+    padding: 6px 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .employee-card-details {
+    display: grid;
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .employee-card-details div {
+    display: grid;
+    gap: 5px;
+  }
+
+  .employee-card-details dt {
+    color: var(--muted);
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .employee-card-details dd {
+    margin: 0;
+  }
+
+  .employee-card .status-pill {
+    min-width: 0;
   }
 
   .toolbar-actions button,

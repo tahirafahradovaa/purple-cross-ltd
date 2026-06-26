@@ -432,6 +432,53 @@ async function importEmployees(event) {
       </table>
     </section>
 
+    <section class="mobile-employee-list" aria-label="Employee mobile list">
+      <article v-for="employee in pagedEmployees" :key="employee.code" class="employee-card">
+        <header class="employee-card-header">
+          <button class="name-button" type="button" @click="openView(employee)">
+            <strong>{{ employee.fullName }}</strong>
+            <span>{{ employee.code }}</span>
+          </button>
+          <span>{{ employee.department }}</span>
+        </header>
+
+        <dl class="employee-card-details">
+          <div>
+            <dt>Occupation</dt>
+            <dd>{{ employee.occupation }}</dd>
+          </div>
+          <div>
+            <dt>Employment</dt>
+            <dd>
+              <span :class="['status-pill', statusTone(employmentStatus(employee.dateOfEmployment))]">
+                {{ employmentStatus(employee.dateOfEmployment) }}
+              </span>
+              <small>{{ formatDate(employee.dateOfEmployment) }}</small>
+            </dd>
+          </div>
+          <div>
+            <dt>Termination</dt>
+            <dd>
+              <span :class="['status-pill', statusTone(terminationStatus(employee.terminationDate))]">
+                {{ terminationStatus(employee.terminationDate) }}
+              </span>
+              <small>{{ formatDate(employee.terminationDate) }}</small>
+            </dd>
+          </div>
+        </dl>
+
+        <div class="row-actions">
+          <button class="secondary compact" type="button" @click="openView(employee)">View</button>
+          <button class="secondary compact" type="button" @click="openEdit(employee)">Edit</button>
+          <button class="danger compact" type="button" @click="askDelete(employee)">Delete</button>
+        </div>
+      </article>
+
+      <p v-if="pagedEmployees.length === 0" class="empty-state">
+        No employees match the current filters.
+      </p>
+    </section>
+
     <footer class="pagination" aria-label="Pagination">
       <span>
         Showing {{ sortedEmployees.length === 0 ? 0 : ((page - 1) * pageSize) + 1 }}
