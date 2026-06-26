@@ -2,6 +2,10 @@
 
 Vue 3 employee management dashboard for the Purple Cross Ltd case study.
 
+## Live Demo
+
+https://purple-cross-ltd.vercel.app/
+
 ## Features
 
 - Login screen with client-side validation
@@ -70,11 +74,11 @@ npm run preview
 
 ```text
 src/
-  App.vue               Main dashboard, login, modals, and user flows
+  App.vue               Main dashboard, login, modals, and employee flows
   main.js               Vue app entry point
   styles.css            Application styles
   utils/
-  auth.js             Login validation helpers
+    auth.js             Login validation helpers
     employees.js        Employee validation, filtering, sorting, and import/export helpers
 test/
   auth.test.js          Login validation tests
