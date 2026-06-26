@@ -1,0 +1,402 @@
+[
+    {
+        "code": "EMP001",
+        "fullName": "Nicole Berry",
+        "occupation": "IT Support",
+        "department": "Research",
+        "dateOfEmployment": "2016-07-06",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP002",
+        "fullName": "Dustin Fisher",
+        "occupation": "Production Supervisor",
+        "department": "IT",
+        "dateOfEmployment": "2020-03-26",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP003",
+        "fullName": "Theresa Parker",
+        "occupation": "Pharmacist",
+        "department": "Logistics",
+        "dateOfEmployment": "2019-01-31",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP004",
+        "fullName": "Matthew Figueroa",
+        "occupation": "Production Supervisor",
+        "department": "Logistics",
+        "dateOfEmployment": "2017-08-20",
+        "terminationDate": "2018-01-29"
+    },
+    {
+        "code": "EMP005",
+        "fullName": "Matthew Tran",
+        "occupation": "Chemist",
+        "department": "IT",
+        "dateOfEmployment": "2024-07-31",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP006",
+        "fullName": "Alan Anderson",
+        "occupation": "IT Support",
+        "department": "Logistics",
+        "dateOfEmployment": "2018-01-22",
+        "terminationDate": "2020-10-28"
+    },
+    {
+        "code": "EMP007",
+        "fullName": "Megan Smith",
+        "occupation": "Lab Technician",
+        "department": "Logistics",
+        "dateOfEmployment": "2019-11-05",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP008",
+        "fullName": "Tracy Morales",
+        "occupation": "IT Support",
+        "department": "Logistics",
+        "dateOfEmployment": "2020-10-15",
+        "terminationDate": "2025-01-06"
+    },
+    {
+        "code": "EMP009",
+        "fullName": "Mrs. Lisa Carroll",
+        "occupation": "HR Specialist",
+        "department": "Quality Assurance",
+        "dateOfEmployment": "2017-07-13",
+        "terminationDate": "2025-05-17"
+    },
+    {
+        "code": "EMP010",
+        "fullName": "Jennifer Pearson",
+        "occupation": "Production Supervisor",
+        "department": "Finance",
+        "dateOfEmployment": "2025-10-06",
+        "terminationDate": "2026-01-12"
+    },
+    {
+        "code": "EMP011",
+        "fullName": "Patrick May",
+        "occupation": "HR Specialist",
+        "department": "Research",
+        "dateOfEmployment": "2025-11-02",
+        "terminationDate": "2026-01-31"
+    },
+    {
+        "code": "EMP012",
+        "fullName": "Christopher Newton",
+        "occupation": "IT Support",
+        "department": "Sales",
+        "dateOfEmployment": "2019-02-08",
+        "terminationDate": "2027-05-12"
+    },
+    {
+        "code": "EMP013",
+        "fullName": "Teresa Wade",
+        "occupation": "Chemist",
+        "department": "IT",
+        "dateOfEmployment": "2022-11-26",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP014",
+        "fullName": "Mary Frederick",
+        "occupation": "HR Specialist",
+        "department": "Human Resources",
+        "dateOfEmployment": "2018-11-02",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP015",
+        "fullName": "Michele Fischer",
+        "occupation": "Sales Executive",
+        "department": "Production",
+        "dateOfEmployment": "2020-09-03",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP016",
+        "fullName": "Clayton Cordova",
+        "occupation": "IT Support",
+        "department": "Production",
+        "dateOfEmployment": "2025-07-20",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP017",
+        "fullName": "Mary Thompson DDS",
+        "occupation": "Pharmacist",
+        "department": "Production",
+        "dateOfEmployment": "2017-06-17",
+        "terminationDate": "2019-03-10"
+    },
+    {
+        "code": "EMP018",
+        "fullName": "Susan Hill",
+        "occupation": "IT Support",
+        "department": "Finance",
+        "dateOfEmployment": "2016-12-16",
+        "terminationDate": "2018-04-05"
+    },
+    {
+        "code": "EMP019",
+        "fullName": "Daniel Lee",
+        "occupation": "Accountant",
+        "department": "Sales",
+        "dateOfEmployment": "2024-01-30",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP020",
+        "fullName": "Jeremy Dunn",
+        "occupation": "Chemist",
+        "department": "Sales",
+        "dateOfEmployment": "2017-01-24",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP021",
+        "fullName": "Matthew Williams",
+        "occupation": "Lab Technician",
+        "department": "Human Resources",
+        "dateOfEmployment": "2022-04-12",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP022",
+        "fullName": "Kristen Brooks",
+        "occupation": "HR Specialist",
+        "department": "Quality Assurance",
+        "dateOfEmployment": "2023-07-16",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP023",
+        "fullName": "Tiffany Marshall",
+        "occupation": "Lab Technician",
+        "department": "Sales",
+        "dateOfEmployment": "2025-04-27",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP024",
+        "fullName": "Bethany Perry",
+        "occupation": "Pharmacist",
+        "department": "Finance",
+        "dateOfEmployment": "2017-11-06",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP025",
+        "fullName": "Linda Montgomery",
+        "occupation": "Sales Executive",
+        "department": "Sales",
+        "dateOfEmployment": "2021-04-03",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP026",
+        "fullName": "Steven Burton",
+        "occupation": "Lab Technician",
+        "department": "Sales",
+        "dateOfEmployment": "2024-03-12",
+        "terminationDate": "2025-06-22"
+    },
+    {
+        "code": "EMP027",
+        "fullName": "Amanda King",
+        "occupation": "Pharmacist",
+        "department": "Research",
+        "dateOfEmployment": "2025-10-02",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP028",
+        "fullName": "Joanna Kennedy",
+        "occupation": "IT Support",
+        "department": "Sales",
+        "dateOfEmployment": "2025-09-09",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP029",
+        "fullName": "Brianna Wall",
+        "occupation": "Accountant",
+        "department": "Human Resources",
+        "dateOfEmployment": "2022-04-13",
+        "terminationDate": "2026-04-17"
+    },
+    {
+        "code": "EMP030",
+        "fullName": "Steven May",
+        "occupation": "Sales Executive",
+        "department": "Quality Assurance",
+        "dateOfEmployment": "2016-09-05",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP031",
+        "fullName": "Eric Kelly",
+        "occupation": "IT Support",
+        "department": "Production",
+        "dateOfEmployment": "2018-02-18",
+        "terminationDate": "2018-06-07"
+    },
+    {
+        "code": "EMP032",
+        "fullName": "Troy Odonnell",
+        "occupation": "Sales Executive",
+        "department": "Sales",
+        "dateOfEmployment": "2018-06-27",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP033",
+        "fullName": "Anthony Booth",
+        "occupation": "Lab Technician",
+        "department": "Finance",
+        "dateOfEmployment": "2022-05-07",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP034",
+        "fullName": "Eric Davis",
+        "occupation": "HR Specialist",
+        "department": "Production",
+        "dateOfEmployment": "2021-09-11",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP035",
+        "fullName": "David Frazier",
+        "occupation": "IT Support",
+        "department": "Human Resources",
+        "dateOfEmployment": "2023-05-20",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP036",
+        "fullName": "Marie Allen",
+        "occupation": "Accountant",
+        "department": "Quality Assurance",
+        "dateOfEmployment": "2026-05-25",
+        "terminationDate": "2026-07-04"
+    },
+    {
+        "code": "EMP037",
+        "fullName": "Tonya Gibson",
+        "occupation": "Lab Technician",
+        "department": "Finance",
+        "dateOfEmployment": "2016-01-06",
+        "terminationDate": "2017-01-22"
+    },
+    {
+        "code": "EMP038",
+        "fullName": "Blake French",
+        "occupation": "IT Support",
+        "department": "Production",
+        "dateOfEmployment": "2016-10-15",
+        "terminationDate": "2019-10-29"
+    },
+    {
+        "code": "EMP039",
+        "fullName": "Christina Olsen",
+        "occupation": "Production Supervisor",
+        "department": "Finance",
+        "dateOfEmployment": "2022-06-14",
+        "terminationDate": "2024-07-06"
+    },
+    {
+        "code": "EMP040",
+        "fullName": "Kimberly Floyd",
+        "occupation": "Chemist",
+        "department": "Sales",
+        "dateOfEmployment": "2024-04-15",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP041",
+        "fullName": "Susan Dennis",
+        "occupation": "Lab Technician",
+        "department": "Production",
+        "dateOfEmployment": "2023-01-29",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP042",
+        "fullName": "Rebecca Peterson",
+        "occupation": "Production Supervisor",
+        "department": "Human Resources",
+        "dateOfEmployment": "2019-08-13",
+        "terminationDate": "2027-07-12"
+    },
+    {
+        "code": "EMP043",
+        "fullName": "Joshua Cochran",
+        "occupation": "Chemist",
+        "department": "Sales",
+        "dateOfEmployment": "2019-01-26",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP044",
+        "fullName": "Karina Long",
+        "occupation": "Production Supervisor",
+        "department": "Finance",
+        "dateOfEmployment": "2025-06-13",
+        "terminationDate": "2025-12-15"
+    },
+    {
+        "code": "EMP045",
+        "fullName": "Kaitlyn Powell",
+        "occupation": "Chemist",
+        "department": "Sales",
+        "dateOfEmployment": "2026-01-24",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP046",
+        "fullName": "Kristy Stewart",
+        "occupation": "Chemist",
+        "department": "Logistics",
+        "dateOfEmployment": "2023-02-27",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP047",
+        "fullName": "Jeffrey Crawford",
+        "occupation": "HR Specialist",
+        "department": "Quality Assurance",
+        "dateOfEmployment": "2016-10-10",
+        "terminationDate": "2025-07-21"
+    },
+    {
+        "code": "EMP048",
+        "fullName": "Natasha Ayala",
+        "occupation": "Accountant",
+        "department": "Research",
+        "dateOfEmployment": "2017-03-31",
+        "terminationDate": "2017-08-06"
+    },
+    {
+        "code": "EMP049",
+        "fullName": "Gary Spencer",
+        "occupation": "HR Specialist",
+        "department": "Finance",
+        "dateOfEmployment": "2025-04-17",
+        "terminationDate": null
+    },
+    {
+        "code": "EMP050",
+        "fullName": "Charles Huff",
+        "occupation": "IT Support",
+        "department": "Logistics",
+        "dateOfEmployment": "2026-02-11",
+        "terminationDate": null
+    }
+]
