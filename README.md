@@ -9,7 +9,6 @@ Vue 3 employee management dashboard for the Purple Cross Ltd case study.
 - Create, view, edit, and delete employee records
 - Delete confirmation dialog with employee context
 - Employee form validation for required fields, duplicate codes, invalid dates, and termination date rules
-- User access management with editable name, email, role, and status
 - JSON import and export for employee data
 - Responsive layout for desktop and smaller screens
 
@@ -75,10 +74,10 @@ src/
   main.js               Vue app entry point
   styles.css            Application styles
   utils/
-    auth.js             Login and user validation helpers
+  auth.js             Login validation helpers
     employees.js        Employee validation, filtering, sorting, and import/export helpers
 test/
-  auth.test.js          Login and user edit validation tests
+  auth.test.js          Login validation tests
   employees.test.js     Employee validation and table helper tests
 ```
 

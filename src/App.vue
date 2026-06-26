@@ -15,44 +15,9 @@ import {
   terminationStatus,
   validateEmployee,
 } from './utils/employees';
-import {
-  normalizeUser,
-  userNameFromEmail,
-  validateLogin,
-  validateUser,
-} from './utils/auth';
-
-const userRoles = ['System Administrator', 'HR Manager', 'HR Viewer'];
-const userStatuses = ['Active', 'Suspended'];
-const initialUsers = [
-  {
-    id: 'USR001',
-    name: 'Admin Manager',
-    email: 'admin@purplecross.test',
-    role: 'System Administrator',
-    status: 'Active',
-    lastActive: 'Today',
-  },
-  {
-    id: 'USR002',
-    name: 'Helen Caruana',
-    email: 'helen.caruana@purplecross.test',
-    role: 'HR Manager',
-    status: 'Active',
-    lastActive: 'Yesterday',
-  },
-  {
-    id: 'USR003',
-    name: 'Mark Grech',
-    email: 'mark.grech@purplecross.test',
-    role: 'HR Viewer',
-    status: 'Suspended',
-    lastActive: '12 Jun 2026',
-  },
-];
+import { userNameFromEmail, validateLogin } from './utils/auth';
 
 const employees = ref(employeesSeed.map(normalizeEmployee));
-const accessUsers = ref(initialUsers.map(normalizeUser));
 const query = ref('');
 const departmentFilter = ref('All departments');
 const statusFilter = ref('All statuses');
@@ -71,15 +36,14 @@ const importInput = ref(null);
 const appVersion = '1.0.0';
 const isAuthenticated = ref(false);
 const loginError = ref('');
-const currentUser = ref(normalizeUser(initialUsers[0]));
+const currentUser = ref({
+  name: 'Admin Manager',
+  email: 'admin@purplecross.test',
+});
 const loginForm = reactive({
   email: 'admin@purplecross.test',
   password: 'purplecross',
 });
-const editingUser = ref(null);
-const originalUserEmail = ref('');
-const userForm = reactive(normalizeUser({}));
-const userErrors = ref({});
 
 const columns = [
   { key: 'fullName', label: 'Full name' },
@@ -152,15 +116,9 @@ function login() {
 
   if (loginError.value) return;
 
-  // Known users keep their saved role/status; unknown demo logins receive viewer access.
   currentUser.value = {
-    id: 'USR000',
     name: userNameFromEmail(loginForm.email),
     email: loginForm.email.trim(),
-    role: 'HR Viewer',
-    status: 'Active',
-    lastActive: 'Today',
-    ...accessUsers.value.find((user) => user.email.toLowerCase() === loginForm.email.trim().toLowerCase()),
   };
   isAuthenticated.value = true;
 }
@@ -169,7 +127,6 @@ function logout() {
   // Clear transient UI state so the next session starts from the dashboard list.
   closePanel();
   confirmDelete.value = null;
-  closeUserEditor();
   isAuthenticated.value = false;
 }
 
@@ -213,44 +170,6 @@ function closePanel() {
   selectedEmployee.value = null;
   formErrors.value = {};
   mode.value = 'list';
-}
-
-function openUserEditor(user) {
-  editingUser.value = user;
-  // Preserve the original email so users can save their own unchanged address.
-  originalUserEmail.value = user.email;
-  userErrors.value = {};
-  Object.assign(userForm, normalizeUser(user));
-}
-
-function closeUserEditor() {
-  editingUser.value = null;
-  originalUserEmail.value = '';
-  userErrors.value = {};
-  Object.assign(userForm, normalizeUser({}));
-}
-
-function saveUser() {
-  const errors = validateUser(userForm, accessUsers.value, originalUserEmail.value);
-  userErrors.value = errors;
-
-  if (Object.keys(errors).length > 0) return;
-
-  const normalized = normalizeUser(userForm);
-  accessUsers.value = accessUsers.value.map((user) => (
-    user.id === normalized.id ? normalized : user
-  ));
-
-  // Keep the header badge in sync when the signed-in user edits their own profile.
-  if (currentUser.value.id === normalized.id) {
-    currentUser.value = normalized;
-  }
-
-  closeUserEditor();
-}
-
-function userStatusTone(status) {
-  return status === 'Active' ? 'positive' : 'danger';
 }
 
 function saveEmployee() {
@@ -532,50 +451,6 @@ async function importEmployees(event) {
       </div>
     </footer>
 
-    <section class="access-panel" aria-label="User access management">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Access</p>
-          <h2>User Management</h2>
-        </div>
-        <span>{{ accessUsers.length }} users</span>
-      </div>
-
-      <div class="table-wrap compact-table">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">User</th>
-              <th scope="col">Role</th>
-              <th scope="col">Status</th>
-              <th scope="col">Last active</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in accessUsers" :key="user.id">
-              <td>
-                <strong>{{ user.name }}</strong>
-                <small>{{ user.email }}</small>
-              </td>
-              <td>{{ user.role }}</td>
-              <td>
-                <span :class="['status-pill small-pill', userStatusTone(user.status)]">
-                  {{ user.status }}
-                </span>
-              </td>
-              <td>{{ user.lastActive }}</td>
-              <td>
-                <button class="secondary compact" type="button" @click="openUserEditor(user)">
-                  Edit user
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
     <button class="create-button" type="button" @click="openCreate">Create Employee</button>
 
     <aside v-if="mode !== 'list'" class="drawer" aria-label="Employee profile">
@@ -706,45 +581,5 @@ async function importEmployees(event) {
       </section>
     </div>
 
-    <div v-if="editingUser" class="modal-backdrop" role="presentation">
-      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-user-title">
-        <h2 id="edit-user-title">Edit user</h2>
-
-        <form class="employee-form" novalidate @submit.prevent="saveUser">
-          <label>
-            <span>Name *</span>
-            <input v-model="userForm.name" autocomplete="name" />
-            <small v-if="userErrors.name">{{ userErrors.name }}</small>
-          </label>
-
-          <label>
-            <span>Email *</span>
-            <input v-model="userForm.email" autocomplete="email" inputmode="email" type="email" />
-            <small v-if="userErrors.email">{{ userErrors.email }}</small>
-          </label>
-
-          <label>
-            <span>Role *</span>
-            <select v-model="userForm.role">
-              <option v-for="role in userRoles" :key="role" :value="role">{{ role }}</option>
-            </select>
-            <small v-if="userErrors.role">{{ userErrors.role }}</small>
-          </label>
-
-          <label>
-            <span>Status *</span>
-            <select v-model="userForm.status">
-              <option v-for="status in userStatuses" :key="status" :value="status">{{ status }}</option>
-            </select>
-            <small v-if="userErrors.status">{{ userErrors.status }}</small>
-          </label>
-
-          <div class="modal-actions">
-            <button class="secondary" type="button" @click="closeUserEditor">Cancel</button>
-            <button class="primary" type="submit">Save user</button>
-          </div>
-        </form>
-      </section>
-    </div>
   </main>
 </template>

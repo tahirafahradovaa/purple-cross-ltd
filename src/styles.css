@@ -262,32 +262,10 @@ button:focus-visible {
   overflow: auto;
 }
 
-.access-panel {
-  margin-top: 28px;
-}
-
-.section-heading {
-  align-items: end;
-  display: flex;
-  gap: 16px;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.section-heading > span {
-  color: var(--muted);
-  font-size: 0.86rem;
-  font-weight: 800;
-}
-
 table {
   border-collapse: collapse;
   min-width: 980px;
   width: 100%;
-}
-
-.compact-table table {
-  min-width: 760px;
 }
 
 th,
@@ -369,10 +347,6 @@ small {
   flex-direction: column;
   justify-content: center;
   min-height: 50px;
-}
-
-.small-pill {
-  min-width: 86px;
 }
 
 .positive {
@@ -702,11 +676,6 @@ button.danger {
     align-items: stretch;
     flex-direction: column;
     justify-content: space-between;
-  }
-
-  .section-heading {
-    align-items: stretch;
-    flex-direction: column;
   }
 
   .toolbar-actions,

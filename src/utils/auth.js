@@ -17,41 +17,6 @@ export function validateLogin(credentials) {
   return '';
 }
 
-export function normalizeUser(user) {
-  return {
-    id: String(user.id ?? '').trim(),
-    name: String(user.name ?? '').trim(),
-    email: String(user.email ?? '').trim(),
-    role: String(user.role ?? '').trim(),
-    status: String(user.status ?? '').trim(),
-    lastActive: String(user.lastActive ?? '').trim(),
-  };
-}
-
-export function validateUser(user, existingUsers, originalEmail = '') {
-  const normalized = normalizeUser(user);
-  const errors = {};
-
-  if (!normalized.name) errors.name = 'Name is required.';
-  if (!normalized.email) errors.email = 'Email is required.';
-  if (!normalized.role) errors.role = 'Role is required.';
-  if (!normalized.status) errors.status = 'Status is required.';
-
-  if (normalized.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized.email)) {
-    errors.email = 'Enter a valid email address.';
-  }
-
-  // Email is the unique login identifier, but the edited user's current email is valid.
-  const duplicate = existingUsers.some((existingUser) => (
-    existingUser.email.toLowerCase() === normalized.email.toLowerCase()
-    && existingUser.email.toLowerCase() !== originalEmail.toLowerCase()
-  ));
-
-  if (duplicate) errors.email = 'This email is already assigned to another user.';
-
-  return errors;
-}
-
 export function userNameFromEmail(email) {
   // Demo logins derive a readable display name from common email separators.
   return String(email)
