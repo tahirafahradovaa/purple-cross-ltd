@@ -39,6 +39,7 @@ const originalCode = ref('');
 const confirmDelete = ref(null);
 const importError = ref('');
 const importInput = ref(null);
+const toasts = ref([]);
 const appVersion = '1.0.0';
 const storedSession = readStoredSession(window.localStorage);
 const isAuthenticated = ref(Boolean(storedSession));
@@ -95,6 +96,12 @@ const pagedEmployees = computed(() => {
   return sortedEmployees.value.slice(start, start + pageSize.value);
 });
 
+const hasActiveFilters = computed(() => (
+  query.value.trim()
+  || departmentFilter.value !== 'All departments'
+  || statusFilter.value !== 'All statuses'
+));
+
 const metrics = computed(() => {
   // Active headcount excludes people whose termination date has already passed.
   const active = employees.value.filter((employee) => (
@@ -121,11 +128,15 @@ const userInitials = computed(() => currentUser.value.name
 function login() {
   loginError.value = validateLogin(loginForm);
 
-  if (loginError.value) return;
+  if (loginError.value) {
+    addToast('error', loginError.value);
+    return;
+  }
 
   currentUser.value = createSessionUser(loginForm.email);
   writeStoredSession(window.localStorage, currentUser.value);
   isAuthenticated.value = true;
+  addToast('success', `Signed in as ${currentUser.value.name}.`);
 }
 
 function logout() {
@@ -134,6 +145,7 @@ function logout() {
   confirmDelete.value = null;
   clearStoredSession(window.localStorage);
   isAuthenticated.value = false;
+  addToast('success', 'Signed out successfully.');
 }
 
 function setSort(key) {
@@ -148,6 +160,14 @@ function setSort(key) {
 
 function resetPaging() {
   page.value = 1;
+}
+
+function clearFilters() {
+  query.value = '';
+  departmentFilter.value = 'All departments';
+  statusFilter.value = 'All statuses';
+  resetPaging();
+  addToast('success', 'Filters cleared.');
 }
 
 function openCreate() {
@@ -182,7 +202,10 @@ function saveEmployee() {
   const errors = validateEmployee(form, employees.value, originalCode.value);
   formErrors.value = errors;
 
-  if (Object.keys(errors).length > 0) return;
+  if (Object.keys(errors).length > 0) {
+    addToast('error', 'Please correct the highlighted employee fields.');
+    return;
+  }
 
   const normalized = normalizeEmployee(form);
 
@@ -192,9 +215,11 @@ function saveEmployee() {
       employee.code === originalCode.value ? normalized : employee
     ));
     selectedEmployee.value = normalized;
+    addToast('success', `${normalized.fullName} was updated.`);
   } else {
     employees.value = [...employees.value, normalized];
     selectedEmployee.value = normalized;
+    addToast('success', `${normalized.fullName} was created.`);
   }
 
   mode.value = 'view';
@@ -208,10 +233,12 @@ function askDelete(employee) {
 function deleteEmployee() {
   if (!confirmDelete.value) return;
 
+  const deletedName = confirmDelete.value.fullName;
   employees.value = employees.value.filter((employee) => employee.code !== confirmDelete.value.code);
   if (selectedEmployee.value?.code === confirmDelete.value.code) closePanel();
   confirmDelete.value = null;
   resetPaging();
+  addToast('success', `${deletedName} was removed.`);
 }
 
 function downloadEmployees() {
@@ -222,6 +249,7 @@ function downloadEmployees() {
   anchor.download = 'purple_cross_employees_export.json';
   anchor.click();
   URL.revokeObjectURL(url);
+  addToast('success', 'Employee data export started.');
 }
 
 function openImportPicker() {
@@ -249,11 +277,24 @@ async function importEmployees(event) {
     employees.value = imported;
     closePanel();
     resetPaging();
+    importError.value = '';
+    addToast('success', `Imported ${imported.length} employees.`);
   } catch (error) {
     importError.value = error.message || 'Could not import employees.';
+    addToast('error', importError.value);
   } finally {
     event.target.value = '';
   }
+}
+
+function addToast(type, message) {
+  const id = Date.now() + Math.random();
+  toasts.value = [...toasts.value, { id, type, message }];
+  window.setTimeout(() => removeToast(id), 4200);
+}
+
+function removeToast(id) {
+  toasts.value = toasts.value.filter((toast) => toast.id !== id);
 }
 </script>
 
@@ -312,7 +353,23 @@ async function importEmployees(event) {
       </div>
     </header>
 
-    <section class="metrics" aria-label="Employee summary">
+    <nav class="module-nav" aria-label="Employee module navigation">
+      <a href="#summary" class="active">Summary</a>
+      <a href="#employees">Employees</a>
+      <a href="#tools">Data tools</a>
+    </nav>
+
+    <section id="tools" class="taskbar" aria-label="Employee task bar">
+      <div>
+        <span>{{ sortedEmployees.length }} records shown</span>
+        <strong>{{ hasActiveFilters ? 'Filters active' : 'No active filters' }}</strong>
+      </div>
+      <button class="secondary compact" type="button" :disabled="!hasActiveFilters" @click="clearFilters">
+        Clear filters
+      </button>
+    </section>
+
+    <section id="summary" class="metrics" aria-label="Employee summary">
       <article>
         <span>Total employees</span>
         <strong>{{ metrics.total }}</strong>
@@ -378,7 +435,7 @@ async function importEmployees(event) {
 
     <p v-if="importError" class="inline-error">{{ importError }}</p>
 
-    <section class="table-wrap" aria-label="Employee grid">
+    <section id="employees" class="table-wrap" aria-label="Employee grid">
       <table>
         <thead>
           <tr>
@@ -633,6 +690,17 @@ async function importEmployees(event) {
         </div>
       </section>
     </div>
-
   </main>
+
+  <div class="toast-stack" aria-live="polite" aria-label="Notifications">
+    <div
+      v-for="toast in toasts"
+      :key="toast.id"
+      :class="['toast', toast.type]"
+      role="status"
+    >
+      <span>{{ toast.message }}</span>
+      <button type="button" aria-label="Dismiss notification" @click="removeToast(toast.id)">x</button>
+    </div>
+  </div>
 </template>

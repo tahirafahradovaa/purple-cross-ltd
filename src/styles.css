@@ -102,6 +102,57 @@ button:disabled {
   margin-bottom: 24px;
 }
 
+.module-nav {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 6px;
+}
+
+.module-nav a {
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 9px 12px;
+  text-decoration: none;
+}
+
+.module-nav a:hover,
+.module-nav a.active {
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+.taskbar {
+  align-items: center;
+  background: #eef7f5;
+  border: 1px solid #c7e4de;
+  border-radius: 8px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+}
+
+.taskbar span {
+  color: var(--muted);
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+}
+
+.taskbar strong {
+  color: var(--text);
+}
+
 .eyebrow {
   color: var(--accent);
   font-size: 0.76rem;
@@ -618,6 +669,56 @@ button.danger {
   padding-top: 18px;
 }
 
+.toast-stack {
+  bottom: 24px;
+  display: grid;
+  gap: 10px;
+  max-width: min(420px, calc(100vw - 32px));
+  position: fixed;
+  right: 24px;
+  z-index: 40;
+}
+
+.toast {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 12px 12px 12px 14px;
+}
+
+.toast.success {
+  border-left-color: var(--positive);
+}
+
+.toast.error {
+  border-left-color: var(--danger);
+}
+
+.toast span {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.toast button {
+  background: var(--surface-muted);
+  border: 0;
+  border-radius: 50%;
+  color: var(--muted);
+  flex: 0 0 28px;
+  font-weight: 900;
+  height: 28px;
+  width: 28px;
+}
+
 .visually-hidden {
   height: 1px;
   opacity: 0;
@@ -647,6 +748,11 @@ button.danger {
 
   .toolbar {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .taskbar {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .toolbar-actions {
@@ -680,6 +786,14 @@ button.danger {
     align-items: stretch;
     flex-direction: column;
     justify-content: space-between;
+  }
+
+  .module-nav {
+    overflow-x: auto;
+  }
+
+  .module-nav a {
+    flex: 0 0 auto;
   }
 
   .toolbar-actions,
@@ -774,5 +888,12 @@ button.danger {
     left: 14px;
     right: 14px;
     width: auto;
+  }
+
+  .toast-stack {
+    bottom: 78px;
+    left: 12px;
+    max-width: none;
+    right: 12px;
   }
 }
