@@ -198,7 +198,7 @@ describe('employee export formatting', () => {
     assert.equal(
       csv,
       [
-        'code,fullName,occupation,department,dateOfEmployment,terminationDate',
+        'Code,Full Name,Occupation,Department,Date of Employment,Termination Date',
         'EMP003,Megan Smith,Lab Technician,Production,2024-03-01,',
       ].join('\n'),
     );

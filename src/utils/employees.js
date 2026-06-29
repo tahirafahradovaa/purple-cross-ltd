@@ -7,6 +7,15 @@ export const employeeFields = [
   'terminationDate',
 ];
 
+const employeeExportLabels = {
+  code: 'Code',
+  fullName: 'Full Name',
+  occupation: 'Occupation',
+  department: 'Department',
+  dateOfEmployment: 'Date of Employment',
+  terminationDate: 'Termination Date',
+};
+
 export function createEmptyEmployee(nextCode = '') {
   return {
     code: nextCode,
@@ -173,7 +182,7 @@ export function exportCsv(employees) {
   });
 
   return [
-    headers.join(','),
+    headers.map((field) => escapeCsvCell(employeeExportLabels[field])).join(','),
     ...rows.map((row) => row.join(',')),
   ].join('\n');
 }

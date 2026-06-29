@@ -472,6 +472,11 @@ button.danger {
   padding: 0 10px;
 }
 
+button.compact {
+  min-height: 34px;
+  padding: 0 10px;
+}
+
 .pagination {
   color: var(--muted);
   flex-wrap: wrap;
