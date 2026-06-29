@@ -197,6 +197,16 @@ function clearFilters() {
   addToast('success', 'Filters cleared.');
 }
 
+function clearDepartmentFilter() {
+  departmentFilter.value = 'All departments';
+  resetPaging();
+}
+
+function clearStatusFilter() {
+  statusFilter.value = 'All statuses';
+  resetPaging();
+}
+
 function openCreate() {
   Object.assign(form, createEmptyEmployee(nextEmployeeCode(employees.value)));
   originalCode.value = '';
@@ -486,23 +496,45 @@ function removeToast(id) {
         />
       </label>
 
-      <label>
+      <div class="filter-field">
         <span>Department</span>
-        <select v-model="departmentFilter" @change="resetPaging">
-          <option v-for="department in departments" :key="department" :value="department">
-            {{ department }}
-          </option>
-        </select>
-      </label>
+        <div :class="['select-clear', { active: departmentFilter !== 'All departments' }]">
+          <select v-model="departmentFilter" @change="resetPaging">
+            <option v-for="department in departments" :key="department" :value="department">
+              {{ department }}
+            </option>
+          </select>
+          <button
+            v-if="departmentFilter !== 'All departments'"
+            class="clear-select"
+            type="button"
+            aria-label="Clear department filter"
+            @click="clearDepartmentFilter"
+          >
+            x
+          </button>
+        </div>
+      </div>
 
-      <label>
+      <div class="filter-field">
         <span>Status</span>
-        <select v-model="statusFilter" @change="resetPaging">
-          <option v-for="status in statuses" :key="status" :value="status">
-            {{ status }}
-          </option>
-        </select>
-      </label>
+        <div :class="['select-clear', { active: statusFilter !== 'All statuses' }]">
+          <select v-model="statusFilter" @change="resetPaging">
+            <option v-for="status in statuses" :key="status" :value="status">
+              {{ status }}
+            </option>
+          </select>
+          <button
+            v-if="statusFilter !== 'All statuses'"
+            class="clear-select"
+            type="button"
+            aria-label="Clear status filter"
+            @click="clearStatusFilter"
+          >
+            x
+          </button>
+        </div>
+      </div>
 
       <div class="toolbar-actions">
         <span>Data</span>
