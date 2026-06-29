@@ -270,6 +270,7 @@ function deleteEmployee() {
 
 function openExportDialog() {
   exportFormat.value = 'json';
+  // If the user has narrowed the grid, default to exporting the view they are looking at.
   exportScope.value = hasActiveFilters.value ? 'filtered' : 'all';
   showExportDialog.value = true;
 }
@@ -279,6 +280,7 @@ function closeExportDialog() {
 }
 
 function downloadEmployees() {
+  // Keep filtered exports aligned with the current sorted grid, not only raw filter matches.
   const source = exportScope.value === 'filtered' ? sortedEmployees.value : employees.value;
   const isJson = exportFormat.value === 'json';
   const content = isJson ? exportJson(source) : exportCsv(source);

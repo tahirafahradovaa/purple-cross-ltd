@@ -164,6 +164,7 @@ export function exportJson(employees) {
 }
 
 export function exportCsv(employees) {
+  // CSV keeps the "Excel" export dependency-free while still opening cleanly in spreadsheets.
   const headers = employeeFields;
   const rows = employees.map((employee) => {
     const normalized = normalizeEmployee(employee);
@@ -222,6 +223,7 @@ function validateImportedEmployeeShape(employee) {
     throw new Error('Each imported employee must be an object.');
   }
 
+  // Imports are intentionally strict so random JSON cannot pollute employee records.
   const keys = Object.keys(employee);
   const missingField = employeeFields.find((field) => !(field in employee));
   if (missingField) {
@@ -247,6 +249,7 @@ function validateImportedEmployeeShape(employee) {
 function escapeCsvCell(value) {
   const text = String(value ?? '');
 
+  // Excel-style CSV requires quotes to be doubled inside quoted cells.
   if (/[",\n\r]/.test(text)) {
     return `"${text.replaceAll('"', '""')}"`;
   }
