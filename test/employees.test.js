@@ -128,6 +128,34 @@ describe('employee import parsing', () => {
     assert.equal(department, 'Production');
   });
 
+  it('rejects imported employees with unsupported extra fields', () => {
+    assert.throws(
+      () => parseImportedEmployees(JSON.stringify([{
+        ...validEmployee,
+        salary: 50000,
+      }])),
+      /unsupported field salary/,
+    );
+  });
+
+  it('rejects imported employees with invalid field types', () => {
+    assert.throws(
+      () => parseImportedEmployees(JSON.stringify([{
+        ...validEmployee,
+        code: 3,
+      }])),
+      /field code must be text/,
+    );
+
+    assert.throws(
+      () => parseImportedEmployees(JSON.stringify([{
+        ...validEmployee,
+        terminationDate: 20240101,
+      }])),
+      /field terminationDate must be text or null/,
+    );
+  });
+
   it('rejects duplicate imported employee codes', () => {
     assert.throws(
       () => parseImportedEmployees(JSON.stringify([
@@ -135,6 +163,16 @@ describe('employee import parsing', () => {
         { ...validEmployee, fullName: 'Duplicate Employee' },
       ])),
       /duplicate employee code EMP003/,
+    );
+  });
+
+  it('rejects duplicate imported employee codes after trimming and case normalization', () => {
+    assert.throws(
+      () => parseImportedEmployees(JSON.stringify([
+        { ...validEmployee, code: ' EMP003 ' },
+        { ...validEmployee, code: 'emp003', fullName: 'Duplicate Employee' },
+      ])),
+      /duplicate employee code emp003/,
     );
   });
 

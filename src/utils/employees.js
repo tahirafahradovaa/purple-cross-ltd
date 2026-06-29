@@ -170,12 +170,8 @@ export function parseImportedEmployees(text) {
   }
 
   const employees = parsed.map((employee) => {
+    validateImportedEmployeeShape(employee);
     const normalized = normalizeEmployee(employee);
-    const missingField = employeeFields.find((field) => !(field in employee));
-
-    if (missingField) {
-      throw new Error(`Imported employee ${normalized.code || 'without code'} is missing ${missingField}.`);
-    }
 
     return normalized;
   });
@@ -205,6 +201,33 @@ function compareDates(left, right) {
 
 function startOfToday(today) {
   return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+}
+
+function validateImportedEmployeeShape(employee) {
+  if (!employee || typeof employee !== 'object' || Array.isArray(employee)) {
+    throw new Error('Each imported employee must be an object.');
+  }
+
+  const keys = Object.keys(employee);
+  const missingField = employeeFields.find((field) => !(field in employee));
+  if (missingField) {
+    throw new Error(`Imported employee ${employee.code || 'without code'} is missing ${missingField}.`);
+  }
+
+  const extraField = keys.find((field) => !employeeFields.includes(field));
+  if (extraField) {
+    throw new Error(`Imported employee ${employee.code || 'without code'} has unsupported field ${extraField}.`);
+  }
+
+  const textFields = ['code', 'fullName', 'occupation', 'department', 'dateOfEmployment'];
+  const invalidTextField = textFields.find((field) => typeof employee[field] !== 'string');
+  if (invalidTextField) {
+    throw new Error(`Imported employee ${employee.code || 'without code'} field ${invalidTextField} must be text.`);
+  }
+
+  if (employee.terminationDate !== null && typeof employee.terminationDate !== 'string') {
+    throw new Error(`Imported employee ${employee.code || 'without code'} field terminationDate must be text or null.`);
+  }
 }
 
 function isValidDateInput(value) {

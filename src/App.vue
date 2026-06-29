@@ -39,6 +39,10 @@ const originalCode = ref('');
 const confirmDelete = ref(null);
 const importError = ref('');
 const importInput = ref(null);
+const showImportDialog = ref(false);
+const importText = ref('');
+const importFileName = ref('');
+const isDraggingImport = ref(false);
 const toasts = ref([]);
 const appVersion = '1.0.0';
 const storedSession = readStoredSession(window.localStorage);
@@ -74,6 +78,25 @@ const statuses = [
   'Terminated',
   'No termination date',
 ];
+
+const importExample = JSON.stringify([
+  {
+    code: 'EMP001',
+    fullName: 'Nicole Berry',
+    occupation: 'IT Support',
+    department: 'Research',
+    dateOfEmployment: '2016-07-06',
+    terminationDate: null,
+  },
+  {
+    code: 'EMP002',
+    fullName: 'Dustin Fisher',
+    occupation: 'Production Supervisor',
+    department: 'IT',
+    dateOfEmployment: '2020-03-26',
+    terminationDate: '2024-12-31',
+  },
+], null, 2);
 
 const filteredEmployees = computed(() => filterEmployees(
   employees.value,
@@ -252,38 +275,81 @@ function downloadEmployees() {
   addToast('success', 'Employee data export started.');
 }
 
-function openImportPicker() {
+function openImportDialog() {
   importError.value = '';
-  importInput.value?.click();
+  importText.value = '';
+  importFileName.value = '';
+  isDraggingImport.value = false;
+  showImportDialog.value = true;
 }
 
-async function importEmployees(event) {
+function closeImportDialog() {
+  importError.value = '';
+  importText.value = '';
+  importFileName.value = '';
+  isDraggingImport.value = false;
+  showImportDialog.value = false;
+}
+
+async function readImportFile(file) {
+  if (!file.name.toLowerCase().endsWith('.json') && file.type !== 'application/json') {
+    throw new Error('Choose a .json file or paste JSON into the import box.');
+  }
+
+  importFileName.value = file.name;
+  importText.value = await file.text();
+  importError.value = '';
+}
+
+async function loadImportFile(event) {
   const [file] = event.target.files || [];
   if (!file) return;
 
-  try {
-    const text = await file.text();
-    const imported = parseImportedEmployees(text);
+  await handleImportFile(file);
+  event.target.value = '';
+}
 
-    // Imports go through the same rules as manual entry to keep both paths consistent.
+async function dropImportFile(event) {
+  isDraggingImport.value = false;
+  const [file] = event.dataTransfer?.files || [];
+  if (!file) return;
+
+  await handleImportFile(file);
+}
+
+async function handleImportFile(file) {
+  try {
+    await readImportFile(file);
+  } catch (error) {
+    importError.value = error.message || 'Could not read the selected file.';
+    addToast('error', importError.value);
+  }
+}
+
+function importEmployees() {
+  try {
+    if (!importText.value.trim()) {
+      throw new Error('Paste JSON or choose a JSON file before importing.');
+    }
+
+    const imported = parseImportedEmployees(importText.value);
+    // Imports append to the current list and go through the same rules as manual entry.
     const validationErrors = imported
-      .map((employee) => validateEmployee(employee, imported, employee.code))
+      .map((employee) => validateEmployee(employee, employees.value))
       .filter((errors) => Object.keys(errors).length > 0);
 
     if (validationErrors.length) {
-      throw new Error('Imported employees contain invalid dates or required fields.');
+      throw new Error('Imported employees contain invalid fields or codes that already exist.');
     }
 
-    employees.value = imported;
+    employees.value = [...employees.value, ...imported];
     closePanel();
     resetPaging();
-    importError.value = '';
-    addToast('success', `Imported ${imported.length} employees.`);
+    closeImportDialog();
+    addToast('success', `Added ${imported.length} employees.`);
   } catch (error) {
     importError.value = error.message || 'Could not import employees.';
     addToast('error', importError.value);
-  } finally {
-    event.target.value = '';
   }
 }
 
@@ -356,10 +422,9 @@ function removeToast(id) {
     <nav class="module-nav" aria-label="Employee module navigation">
       <a href="#summary" class="active">Summary</a>
       <a href="#employees">Employees</a>
-      <a href="#tools">Data tools</a>
     </nav>
 
-    <section id="tools" class="taskbar" aria-label="Employee task bar">
+    <section class="taskbar" aria-label="Employee task bar">
       <div>
         <span>{{ sortedEmployees.length }} records shown</span>
         <strong>{{ hasActiveFilters ? 'Filters active' : 'No active filters' }}</strong>
@@ -424,10 +489,10 @@ function removeToast(id) {
           class="visually-hidden"
           type="file"
           accept="application/json"
-          @change="importEmployees"
+          @change="loadImportFile"
         />
         <div class="toolbar-button-row">
-          <button class="secondary" type="button" @click="openImportPicker">Import</button>
+          <button class="secondary" type="button" @click="openImportDialog">Import</button>
           <button class="secondary" type="button" @click="downloadEmployees">Export</button>
         </div>
       </div>
@@ -688,6 +753,50 @@ function removeToast(id) {
         <div class="modal-actions delete-actions">
           <button class="secondary" type="button" @click="confirmDelete = null">Keep employee</button>
           <button class="danger" type="button" @click="deleteEmployee">Delete record</button>
+        </div>
+      </section>
+    </div>
+
+    <div v-if="showImportDialog" class="modal-backdrop" role="presentation">
+      <section class="modal import-modal" role="dialog" aria-modal="true" aria-labelledby="import-title">
+        <h2 id="import-title">Import employees</h2>
+        <p>
+          Add employees from a JSON array using the exact fields shown below.
+          Unsupported fields, missing fields, invalid dates, and duplicate codes are rejected.
+        </p>
+
+        <button
+          :class="['import-dropzone', { dragging: isDraggingImport }]"
+          type="button"
+          @click="importInput?.click()"
+          @dragenter.prevent="isDraggingImport = true"
+          @dragover.prevent="isDraggingImport = true"
+          @dragleave.prevent="isDraggingImport = false"
+          @drop.prevent="dropImportFile"
+        >
+          <strong>Drop JSON file here</strong>
+          <span>{{ importFileName || 'Only the employee JSON format is accepted.' }}</span>
+        </button>
+
+        <label class="json-input">
+          <span>Paste JSON</span>
+          <textarea
+            v-model="importText"
+            spellcheck="false"
+            placeholder="Paste employee JSON here..."
+          ></textarea>
+        </label>
+
+        <details class="import-example">
+          <summary>Show required format</summary>
+          <pre>{{ importExample }}</pre>
+        </details>
+
+        <p v-if="importError" class="inline-error">{{ importError }}</p>
+
+        <div class="modal-actions">
+          <button class="secondary" type="button" @click="closeImportDialog">Cancel</button>
+          <button class="primary" type="button" @click="importEmployees">Add employees</button>
         </div>
       </section>
     </div>
