@@ -163,6 +163,20 @@ export function exportJson(employees) {
   return JSON.stringify(employees.map(normalizeEmployee), null, 2);
 }
 
+export function exportCsv(employees) {
+  const headers = employeeFields;
+  const rows = employees.map((employee) => {
+    const normalized = normalizeEmployee(employee);
+
+    return headers.map((field) => escapeCsvCell(normalized[field]));
+  });
+
+  return [
+    headers.join(','),
+    ...rows.map((row) => row.join(',')),
+  ].join('\n');
+}
+
 export function parseImportedEmployees(text) {
   const parsed = JSON.parse(text);
   if (!Array.isArray(parsed)) {
@@ -228,6 +242,16 @@ function validateImportedEmployeeShape(employee) {
   if (employee.terminationDate !== null && typeof employee.terminationDate !== 'string') {
     throw new Error(`Imported employee ${employee.code || 'without code'} field terminationDate must be text or null.`);
   }
+}
+
+function escapeCsvCell(value) {
+  const text = String(value ?? '');
+
+  if (/[",\n\r]/.test(text)) {
+    return `"${text.replaceAll('"', '""')}"`;
+  }
+
+  return text;
 }
 
 function isValidDateInput(value) {

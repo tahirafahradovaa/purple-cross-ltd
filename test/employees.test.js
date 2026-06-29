@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
   employmentStatus,
+  exportCsv,
   filterEmployees,
   formatDate,
   nextEmployeeCode,
@@ -187,6 +188,30 @@ describe('employee import parsing', () => {
     assert.equal(employee.code, 'EMP004');
     assert.equal(employee.fullName, 'Alan Anderson');
     assert.equal(employee.terminationDate, '');
+  });
+});
+
+describe('employee export formatting', () => {
+  it('exports spreadsheet-friendly CSV with employee headers', () => {
+    const csv = exportCsv([validEmployee]);
+
+    assert.equal(
+      csv,
+      [
+        'code,fullName,occupation,department,dateOfEmployment,terminationDate',
+        'EMP003,Megan Smith,Lab Technician,Production,2024-03-01,',
+      ].join('\n'),
+    );
+  });
+
+  it('escapes CSV cells that contain commas and quotes', () => {
+    const csv = exportCsv([{
+      ...validEmployee,
+      fullName: 'Parker, "Tess"',
+      department: 'Quality Assurance',
+    }]);
+
+    assert.match(csv, /"Parker, ""Tess"""/);
   });
 });
 

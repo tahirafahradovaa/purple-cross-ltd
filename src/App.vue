@@ -3,6 +3,7 @@ import { computed, reactive, ref } from 'vue';
 import employeesSeed from '../purple_cross_employees.json';
 import {
   createEmptyEmployee,
+  exportCsv,
   employmentStatus,
   exportJson,
   filterEmployees,
@@ -43,6 +44,9 @@ const showImportDialog = ref(false);
 const importText = ref('');
 const importFileName = ref('');
 const isDraggingImport = ref(false);
+const showExportDialog = ref(false);
+const exportFormat = ref('json');
+const exportScope = ref('all');
 const toasts = ref([]);
 const appVersion = '1.0.0';
 const storedSession = readStoredSession(window.localStorage);
@@ -264,15 +268,31 @@ function deleteEmployee() {
   addToast('success', `${deletedName} was removed.`);
 }
 
+function openExportDialog() {
+  exportFormat.value = 'json';
+  exportScope.value = hasActiveFilters.value ? 'filtered' : 'all';
+  showExportDialog.value = true;
+}
+
+function closeExportDialog() {
+  showExportDialog.value = false;
+}
+
 function downloadEmployees() {
-  const blob = new Blob([exportJson(employees.value)], { type: 'application/json' });
+  const source = exportScope.value === 'filtered' ? sortedEmployees.value : employees.value;
+  const isJson = exportFormat.value === 'json';
+  const content = isJson ? exportJson(source) : exportCsv(source);
+  const blob = new Blob([content], { type: isJson ? 'application/json' : 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
+  const scopeLabel = exportScope.value === 'filtered' ? 'filtered' : 'full';
+
   anchor.href = url;
-  anchor.download = 'purple_cross_employees_export.json';
+  anchor.download = `purple_cross_employees_${scopeLabel}_export.${isJson ? 'json' : 'csv'}`;
   anchor.click();
   URL.revokeObjectURL(url);
-  addToast('success', 'Employee data export started.');
+  closeExportDialog();
+  addToast('success', `Exported ${source.length} employees as ${isJson ? 'JSON' : 'CSV'}.`);
 }
 
 function openImportDialog() {
@@ -493,12 +513,10 @@ function removeToast(id) {
         />
         <div class="toolbar-button-row">
           <button class="secondary" type="button" @click="openImportDialog">Import</button>
-          <button class="secondary" type="button" @click="downloadEmployees">Export</button>
+          <button class="secondary" type="button" @click="openExportDialog">Export</button>
         </div>
       </div>
     </section>
-
-    <p v-if="importError" class="inline-error">{{ importError }}</p>
 
     <div id="employees" class="employee-results">
       <section class="table-wrap" aria-label="Employee grid">
@@ -792,11 +810,50 @@ function removeToast(id) {
           <pre>{{ importExample }}</pre>
         </details>
 
-        <p v-if="importError" class="inline-error">{{ importError }}</p>
+        <p v-if="importError" class="inline-error import-error" role="alert">{{ importError }}</p>
 
         <div class="modal-actions">
           <button class="secondary" type="button" @click="closeImportDialog">Cancel</button>
           <button class="primary" type="button" @click="importEmployees">Add employees</button>
+        </div>
+      </section>
+    </div>
+
+    <div v-if="showExportDialog" class="modal-backdrop" role="presentation">
+      <section class="modal export-modal" role="dialog" aria-modal="true" aria-labelledby="export-title">
+        <h2 id="export-title">Export employees</h2>
+        <p>
+          Choose the file format and whether to export every employee or only the
+          records matching the current filters.
+        </p>
+
+        <fieldset class="option-group">
+          <legend>Format</legend>
+          <label>
+            <input v-model="exportFormat" type="radio" value="json" />
+            <span>JSON</span>
+          </label>
+          <label>
+            <input v-model="exportFormat" type="radio" value="csv" />
+            <span>Excel sheet (.csv)</span>
+          </label>
+        </fieldset>
+
+        <fieldset class="option-group">
+          <legend>Records</legend>
+          <label>
+            <input v-model="exportScope" type="radio" value="all" />
+            <span>Full list ({{ employees.length }} employees)</span>
+          </label>
+          <label>
+            <input v-model="exportScope" type="radio" value="filtered" />
+            <span>Current filtered result ({{ sortedEmployees.length }} employees)</span>
+          </label>
+        </fieldset>
+
+        <div class="modal-actions">
+          <button class="secondary" type="button" @click="closeExportDialog">Cancel</button>
+          <button class="primary" type="button" @click="downloadEmployees">Download</button>
         </div>
       </section>
     </div>
