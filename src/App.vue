@@ -92,14 +92,6 @@ const importExample = JSON.stringify([
     dateOfEmployment: '2016-07-06',
     terminationDate: null,
   },
-  {
-    code: 'EMP002',
-    fullName: 'Dustin Fisher',
-    occupation: 'Production Supervisor',
-    department: 'IT',
-    dateOfEmployment: '2020-03-26',
-    terminationDate: '2024-12-31',
-  },
 ], null, 2);
 
 const filteredEmployees = computed(() => filterEmployees(
